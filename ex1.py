@@ -1,15 +1,9 @@
-# part 1
+############# part 1 ###############
 # part a
 
-
 inches_to_meters=lambda inches: inches * 0.0254
-
-
 inches_to_feets= lambda inches: inches * (1 / 12)
-
-
 miles_to_feets=lambda miles: miles * 5280
-
 
 # part b
 # b.1 composition
@@ -141,24 +135,19 @@ def make_miles_class():
 
 
 def to_str(obj):
-    if isinstance(obj, Meters) or isinstance(obj, Inches):
-        return str(obj)
     if isinstance(obj, dict):
         return obj['get']('__str__')()
-
+    return str(obj)
 
 def to_repr(obj):
     if isinstance(obj, dict):
         return obj['get']('__repr__')()
     return repr(obj)
 
-
-
 def type_of(obj):
-    if isinstance(obj, Meters) or isinstance(obj, Inches):
-        return type(obj)
     if isinstance(obj, dict):
         return obj['get']('__type__')
+    return type(obj)
 
 
 #################### Part 3 Generic functions ########################
@@ -176,7 +165,7 @@ def apply(operator, obj1, obj2):
         # Inches is obj1
         elif isinstance(obj1, Inches):
             if not isinstance(obj2, dict):
-                return Inches(obj1.value + meters_to_inches(obj2.value)) if isinstance(obj2, Inches) else Inches(obj1.value + obj2.value)
+                return Inches(obj1.value + meters_to_inches(obj2.value)) if isinstance(obj2, Meters) else Inches(obj1.value + obj2.value)
             if type_of(obj2)=='Miles':
                 return Inches(obj1.value + miles_to_inches(obj2['get']('value')))
             if type_of(obj2)=='Feets':
@@ -184,7 +173,7 @@ def apply(operator, obj1, obj2):
         # Miles is obj1
         elif type_of(obj1) == 'Miles':
             if isinstance(obj2, dict):
-                return Miles['new'](obj1['get']('value') + feets_to_miles(obj2['get']('value'))) if type_of(obj2)+'Feets' else Miles['new'](obj1['get']('value') + obj2['get']('value'))
+                return Miles['new'](obj1['get']('value') + feets_to_miles(obj2['get']('value'))) if type_of(obj2)=='Feets' else Miles['new'](obj1['get']('value') + obj2['get']('value'))
             if isinstance(obj2, Meters):
                 return Miles['new'](obj1['get']('value') + meters_to_miles(obj2.value))
             if isinstance(obj2, Inches):
@@ -192,7 +181,7 @@ def apply(operator, obj1, obj2):
         # Feets is obj1
         elif type_of(obj1) == 'Feets':
             if isinstance(obj2, dict):
-                return Feets['new'](obj1['get']('value') + miles_to_feets(obj2['get']('value'))) if type_of(obj2)+'Feets' else Feets['new'](obj1['get']('value') + obj2['get']('value'))
+                return Feets['new'](obj1['get']('value') + miles_to_feets(obj2['get']('value'))) if type_of(obj2)=='Miles' else Feets['new'](obj1['get']('value') + obj2['get']('value'))
             if isinstance(obj2, Meters):
                 return Feets['new'](obj1['get']('value') + meters_to_feets(obj2.value))
             if isinstance(obj2, Inches):
@@ -208,7 +197,7 @@ def apply(operator, obj1, obj2):
         # Inches is obj1
         elif isinstance(obj1, Inches):
             if not isinstance(obj2, dict):
-                return Inches(obj1.value - meters_to_inches(obj2.value)) if isinstance(obj2, Inches) else Inches(obj1.value - obj2.value)
+                return Inches(obj1.value - meters_to_inches(obj2.value)) if isinstance(obj2, Meters) else Inches(obj1.value - obj2.value)
             if type_of(obj2)=='Miles':
                 return Inches(obj1.value - miles_to_inches(obj2['get']('value')))
             if type_of(obj2)=='Feets':
@@ -216,7 +205,7 @@ def apply(operator, obj1, obj2):
         # Miles is obj1
         elif type_of(obj1) == 'Miles':
             if isinstance(obj2, dict):
-                return Miles['new'](obj1['get']('value') - feets_to_miles(obj2['get']('value'))) if type_of(obj2)-'Feets' else Miles['new'](obj1['get']('value') - obj2['get']('value'))
+                return Miles['new'](obj1['get']('value') - feets_to_miles(obj2['get']('value'))) if type_of(obj2)=='Feets' else Miles['new'](obj1['get']('value') - obj2['get']('value'))
             if isinstance(obj2, Meters):
                 return Miles['new'](obj1['get']('value') - meters_to_miles(obj2.value))
             if isinstance(obj2, Inches):
@@ -224,7 +213,7 @@ def apply(operator, obj1, obj2):
         # Feets is obj1
         elif type_of(obj1) == 'Feets':
             if isinstance(obj2, dict):
-                return Feets['new'](obj1['get']('value') - miles_to_feets(obj2['get']('value'))) if type_of(obj2)-'Feets' else Feets['new'](obj1['get']('value') - obj2['get']('value'))
+                return Feets['new'](obj1['get']('value') - miles_to_feets(obj2['get']('value'))) if type_of(obj2)=='Miles' else Feets['new'](obj1['get']('value') - obj2['get']('value'))
             if isinstance(obj2, Meters):
                 return Feets['new'](obj1['get']('value') - meters_to_feets(obj2.value))
             if isinstance(obj2, Inches):
@@ -242,7 +231,7 @@ def apply(operator, obj1, obj2):
             # Inches is obj1
             elif isinstance(obj1, Inches):
                 if not isinstance(obj2, dict):
-                    return obj1.value > meters_to_inches(obj2.value) if isinstance(obj2, Inches) else obj1.value > obj2.value
+                    return obj1.value > meters_to_inches(obj2.value) if isinstance(obj2, Meters) else obj1.value > obj2.value
                 if type_of(obj2)=='Miles':
                     return obj1.value > miles_to_inches(obj2['get']('value'))
                 if type_of(obj2)=='Feets':
@@ -258,7 +247,7 @@ def apply(operator, obj1, obj2):
             # Feets is obj1
             elif type_of(obj1) == 'Feets':
                 if isinstance(obj2, dict):
-                    return obj1['get']('value') > miles_to_feets(obj2['get']('value')) if type_of(obj2)=='Feets' else obj1['get']('value') > obj2['get']('value')
+                    return obj1['get']('value') > miles_to_feets(obj2['get']('value')) if type_of(obj2)=='Miles' else obj1['get']('value') > obj2['get']('value')
                 if isinstance(obj2, Meters):
                     return obj1['get']('value') > meters_to_feets(obj2.value)
                 if isinstance(obj2, Inches):
@@ -276,7 +265,7 @@ def apply(operator, obj1, obj2):
             # Inches is obj1
             elif isinstance(obj1, Inches):
                 if not isinstance(obj2, dict):
-                    return obj1.value == meters_to_inches(obj2.value) if isinstance(obj2, Inches) else obj1.value == obj2.value
+                    return obj1.value == meters_to_inches(obj2.value) if isinstance(obj2, Meters) else obj1.value == obj2.value
                 if type_of(obj2)=='Miles':
                     return obj1.value == miles_to_inches(obj2['get']('value'))
                 if type_of(obj2)=='Feets':
@@ -292,7 +281,7 @@ def apply(operator, obj1, obj2):
             # Feets is obj1
             elif type_of(obj1) == 'Feets':
                 if isinstance(obj2, dict):
-                    return obj1['get']('value') == miles_to_feets(obj2['get']('value')) if type_of(obj2)=='Feets' else obj1['get']('value') == obj2['get']('value')
+                    return obj1['get']('value') == miles_to_feets(obj2['get']('value')) if type_of(obj2)=='Miles' else obj1['get']('value') == obj2['get']('value')
                 if isinstance(obj2, Meters):
                     return obj1['get']('value') == meters_to_feets(obj2.value)
                 if isinstance(obj2, Inches):
@@ -304,7 +293,8 @@ def coerce_apply(operator, obj1, obj2):
         return apply('add', Meters(0), obj3)     
     elif operator =='sub':
         obj3 = apply('sub', obj1, obj2)
-        return apply('sub', Meters(0), obj3)    
+        return apply('sub', Meters(0), obj3)   
+
 print(coerce_apply('add',Meters(1.5), Inches(1)))
 print(coerce_apply('add', Inches(1) ,Meters(1.5)))
 print(coerce_apply('sub',Meters(1), Inches(1.5)))
@@ -344,7 +334,9 @@ class TreeNode:
 
     # private recursive function that handles the insertion
     def __insert(self, obj, node):
-        if not apply('>', obj, node.value):
+        if apply('==', obj, node.value):
+            raise ValueExistsException(obj)
+        elif not apply('>', obj, node.value):
             if node.left_child == None:
                 node.left_child = TreeNode(obj)
                 node.left_child.parent = node
@@ -356,8 +348,38 @@ class TreeNode:
                 node.right_child.parent = node
             else:
                 self.__insert(obj,node.right_child)        
-        else:
-            raise ValueExistsException(value)
+      
+
+    def delete(self, obj):
+        pass
+    def __delete(self, obj):
+        tmp = search(obj)
+        if tmp:
+            # Case 1: the node we are trying to delete is a leaf
+            if tmp.left_child == None  and tmp.right_child == None:
+                if tmp.parent.left_child == tmp:
+                    tmp.parent.left_child = None
+                else:
+                    tmp.parent.right_child = None
+            # Case 2: the node we are trying to delete have a single child
+            if tmp.left_child == None or tmp.right_child == None:
+                # if he is a left child
+                if tmp.parent.left_child == tmp:
+                    # the parent node will now point to the child of the node we are deleting 
+                    if tmp.left_child is not None:
+                        tmp.parent.left_child = tmp.left_child
+                    else:
+                        tmp.parent.left_child = tmp.right_child
+                # else he is a right child
+                else:
+                    if tmp.left_child is not None:
+                        tmp.parent.right_child = tmp.left_child
+                    else:
+                        tmp.parent.right_child = tmp.right_child                    
+
+
+                
+                
 
 # BST class
 class BSTree:
@@ -430,6 +452,10 @@ print(feets_to_meters(1))
 tree =  BSTree()
 print(tree)
 tree.insert(Meters(10))
+try:
+    tree.insert(Meters(10))
+except Exception as e:
+    print(e)
 tree.insert(Inches(10))
 tree.insert(Feets['new'](10))
 tree.insert(Miles['new'](10))
@@ -442,7 +468,7 @@ for v in tree.in_order():
     else:
         print(v, end=" = ")
     print(apply('add', Meters(0), v))
-
+print(tree.search(Meters(10)))
 
 ## Driver ##
 
