@@ -1,15 +1,15 @@
 ############# part 1 ###############
 # part a
 
-inches_to_meters=lambda inches: inches * 0.0254
-inches_to_feets= lambda inches: inches * (1 / 12)
-miles_to_feets=lambda miles: miles * 5280
+inches_to_meters = lambda inches: inches * 0.0254
+inches_to_feets = lambda inches: inches * (1 / 12)
+miles_to_feets = lambda miles: miles * 5280
 
 # part b
 # b.1 composition
-def composition(f, g): return lambda x: f(g(x))
+composition = lambda f,g: lambda x: f(g(x))
 # b.2 opposite
-def opposite(f): return lambda x: x / f(1)
+opposite = lambda f: lambda x: x / f(1)
 
 
 # part c
@@ -218,74 +218,73 @@ def apply(operator, obj1, obj2):
                 return Feets['new'](obj1['get']('value') - meters_to_feets(obj2.value))
             if isinstance(obj2, Inches):
                 return Feets['new'](obj1['get']('value') - inches_to_feets(obj2.value))
-    elif operator == '>' or operator == 'gt' or operator == '==' or operator == 'eq':
-        if operator =='>' or operator=='gt':
-            # Meters is obj1
-            if isinstance(obj1, Meters):
-                if not isinstance(obj2, dict):
-                    return obj1.value > inches_to_meters(obj2.value) if isinstance(obj2, Inches) else obj1.value > obj2.value
-                if type_of(obj2)=='Miles':
-                    return obj1.value > miles_to_meters(obj2['get']('value'))
-                if type_of(obj2)=='Feets':
-                    return obj1.value > feets_to_meters(obj2['get']('value'))
-            # Inches is obj1
-            elif isinstance(obj1, Inches):
-                if not isinstance(obj2, dict):
-                    return obj1.value > meters_to_inches(obj2.value) if isinstance(obj2, Meters) else obj1.value > obj2.value
-                if type_of(obj2)=='Miles':
-                    return obj1.value > miles_to_inches(obj2['get']('value'))
-                if type_of(obj2)=='Feets':
-                    return obj1.value > feets_to_inches(obj2['get']('value'))
-            # Miles is obj1
-            elif type_of(obj1) == 'Miles':
-                if isinstance(obj2, dict):
-                    return obj1['get']('value') > feets_to_miles(obj2['get']('value')) if type_of(obj2)=='Feets' else obj1['get']('value') > obj2['get']('value')
-                if isinstance(obj2, Meters):
-                    return obj1['get']('value') > meters_to_miles(obj2.value)
-                if isinstance(obj2, Inches):
-                    return obj1['get']('value') > inches_to_miles(obj2.value)
-            # Feets is obj1
-            elif type_of(obj1) == 'Feets':
-                if isinstance(obj2, dict):
-                    return obj1['get']('value') > miles_to_feets(obj2['get']('value')) if type_of(obj2)=='Miles' else obj1['get']('value') > obj2['get']('value')
-                if isinstance(obj2, Meters):
-                    return obj1['get']('value') > meters_to_feets(obj2.value)
-                if isinstance(obj2, Inches):
-                    return obj1['get']('value') > inches_to_feets(obj2.value)
-        ## equality operator ##
-        elif operator =='==' or operator=='eq':
-            # Meters is obj1
-            if isinstance(obj1, Meters):
-                if not isinstance(obj2, dict):
-                    return obj1.value == inches_to_meters(obj2.value) if isinstance(obj2, Inches) else obj1.value == obj2.value
-                if type_of(obj2)=='Miles':
-                    return obj1.value == miles_to_meters(obj2['get']('value'))
-                if type_of(obj2)=='Feets':
-                    return obj1.value == feets_to_meters(obj2['get']('value'))
-            # Inches is obj1
-            elif isinstance(obj1, Inches):
-                if not isinstance(obj2, dict):
-                    return obj1.value == meters_to_inches(obj2.value) if isinstance(obj2, Meters) else obj1.value == obj2.value
-                if type_of(obj2)=='Miles':
-                    return obj1.value == miles_to_inches(obj2['get']('value'))
-                if type_of(obj2)=='Feets':
-                    return obj1.value == feets_to_inches(obj2['get']('value'))
-            # Miles is obj1
-            elif type_of(obj1) == 'Miles':
-                if isinstance(obj2, dict):
-                    return obj1['get']('value') == feets_to_miles(obj2['get']('value')) if type_of(obj2)=='Feets' else obj1['get']('value') == obj2['get']('value')
-                if isinstance(obj2, Meters):
-                    return obj1['get']('value') == meters_to_miles(obj2.value)
-                if isinstance(obj2, Inches):
-                    return obj1['get']('value') == inches_to_miles(obj2.value)
-            # Feets is obj1
-            elif type_of(obj1) == 'Feets':
-                if isinstance(obj2, dict):
-                    return obj1['get']('value') == miles_to_feets(obj2['get']('value')) if type_of(obj2)=='Miles' else obj1['get']('value') == obj2['get']('value')
-                if isinstance(obj2, Meters):
-                    return obj1['get']('value') == meters_to_feets(obj2.value)
-                if isinstance(obj2, Inches):
-                    return obj1['get']('value') == inches_to_feets(obj2.value)
+    if operator =='>' or operator=='gt':
+        # Meters is obj1
+        if isinstance(obj1, Meters):
+            if not isinstance(obj2, dict):
+                return obj1.value > inches_to_meters(obj2.value) if isinstance(obj2, Inches) else obj1.value > obj2.value
+            if type_of(obj2)=='Miles':
+                return obj1.value > miles_to_meters(obj2['get']('value'))
+            if type_of(obj2)=='Feets':
+                return obj1.value > feets_to_meters(obj2['get']('value'))
+        # Inches is obj1
+        elif isinstance(obj1, Inches):
+            if not isinstance(obj2, dict):
+                return obj1.value > meters_to_inches(obj2.value) if isinstance(obj2, Meters) else obj1.value > obj2.value
+            if type_of(obj2)=='Miles':
+                return obj1.value > miles_to_inches(obj2['get']('value'))
+            if type_of(obj2)=='Feets':
+                return obj1.value > feets_to_inches(obj2['get']('value'))
+        # Miles is obj1
+        elif type_of(obj1) == 'Miles':
+            if isinstance(obj2, dict):
+                return obj1['get']('value') > feets_to_miles(obj2['get']('value')) if type_of(obj2)=='Feets' else obj1['get']('value') > obj2['get']('value')
+            if isinstance(obj2, Meters):
+                return obj1['get']('value') > meters_to_miles(obj2.value)
+            if isinstance(obj2, Inches):
+                return obj1['get']('value') > inches_to_miles(obj2.value)
+        # Feets is obj1
+        elif type_of(obj1) == 'Feets':
+            if isinstance(obj2, dict):
+                return obj1['get']('value') > miles_to_feets(obj2['get']('value')) if type_of(obj2)=='Miles' else obj1['get']('value') > obj2['get']('value')
+            if isinstance(obj2, Meters):
+                return obj1['get']('value') > meters_to_feets(obj2.value)
+            if isinstance(obj2, Inches):
+                return obj1['get']('value') > inches_to_feets(obj2.value)
+    ## equality operator ##
+    elif operator =='==' or operator=='eq':
+        # Meters is obj1
+        if isinstance(obj1, Meters):
+            if not isinstance(obj2, dict):
+                return obj1.value == inches_to_meters(obj2.value) if isinstance(obj2, Inches) else obj1.value == obj2.value
+            if type_of(obj2)=='Miles':
+                return obj1.value == miles_to_meters(obj2['get']('value'))
+            if type_of(obj2)=='Feets':
+                return obj1.value == feets_to_meters(obj2['get']('value'))
+        # Inches is obj1
+        elif isinstance(obj1, Inches):
+            if not isinstance(obj2, dict):
+                return obj1.value == meters_to_inches(obj2.value) if isinstance(obj2, Meters) else obj1.value == obj2.value
+            if type_of(obj2)=='Miles':
+                return obj1.value == miles_to_inches(obj2['get']('value'))
+            if type_of(obj2)=='Feets':
+                return obj1.value == feets_to_inches(obj2['get']('value'))
+        # Miles is obj1
+        elif type_of(obj1) == 'Miles':
+            if isinstance(obj2, dict):
+                return obj1['get']('value') == feets_to_miles(obj2['get']('value')) if type_of(obj2)=='Feets' else obj1['get']('value') == obj2['get']('value')
+            if isinstance(obj2, Meters):
+                return obj1['get']('value') == meters_to_miles(obj2.value)
+            if isinstance(obj2, Inches):
+                return obj1['get']('value') == inches_to_miles(obj2.value)
+        # Feets is obj1
+        elif type_of(obj1) == 'Feets':
+            if isinstance(obj2, dict):
+                return obj1['get']('value') == miles_to_feets(obj2['get']('value')) if type_of(obj2)=='Miles' else obj1['get']('value') == obj2['get']('value')
+            if isinstance(obj2, Meters):
+                return obj1['get']('value') == meters_to_feets(obj2.value)
+            if isinstance(obj2, Inches):
+                return obj1['get']('value') == inches_to_feets(obj2.value)
 
 def coerce_apply(operator, obj1, obj2):
     if operator =='add':
@@ -295,10 +294,7 @@ def coerce_apply(operator, obj1, obj2):
         obj3 = apply('sub', obj1, obj2)
         return apply('sub', Meters(0), obj3)   
 
-print(coerce_apply('add',Meters(1.5), Inches(1)))
-print(coerce_apply('add', Inches(1) ,Meters(1.5)))
-print(coerce_apply('sub',Meters(1), Inches(1.5)))
-print(coerce_apply('sub', Inches(1.5) ,Meters(1)))
+
 ################### Part 4 Recursiv Data Structures and Exceptions #################
 
 
@@ -351,31 +347,78 @@ class TreeNode:
       
 
     def delete(self, obj):
-        pass
+        self.__delete(obj)
+
+    def __find(self, obj):
+        if self.value == None:
+            raise EmptyTreeException()
+        tmp = self
+        while(tmp != None):
+            if apply('==', tmp.value, obj):
+                return tmp
+            if not apply('>',obj, tmp.value):
+                tmp = tmp.left_child
+            else:
+                tmp = tmp.right_child
+        raise ValueNotExistsException(obj)  
+
     def __delete(self, obj):
-        tmp = search(obj)
+        # For the third case we need to differente between an object and a treeNode object
+        if not isinstance(obj, TreeNode):
+            tmp = self.__find(obj)
+        else:
+            tmp = obj
+        def Successor(node):
+            if node.left_child==None:
+                return node
+            else:
+                return Successor(node.left_child)
+
+        def num_children(node):
+            children = 0
+            if node.right_child: children+=1
+            if node.left_child: children+=1
+            return children
+
+        childs = num_children(tmp)
+
         if tmp:
+            # check if the current node is the root
+            
+            parent = tmp.parent
+            if tmp.parent == None and childs == 0:
+                tmp.value =None
+                return
+           
             # Case 1: the node we are trying to delete is a leaf
-            if tmp.left_child == None  and tmp.right_child == None:
-                if tmp.parent.left_child == tmp:
-                    tmp.parent.left_child = None
+            if childs == 0:
+                if parent.left_child == tmp:
+                    parent.left_child = None
                 else:
-                    tmp.parent.right_child = None
+                    parent.right_child = None
             # Case 2: the node we are trying to delete have a single child
-            if tmp.left_child == None or tmp.right_child == None:
-                # if he is a left child
-                if tmp.parent.left_child == tmp:
-                    # the parent node will now point to the child of the node we are deleting 
-                    if tmp.left_child is not None:
-                        tmp.parent.left_child = tmp.left_child
-                    else:
-                        tmp.parent.left_child = tmp.right_child
-                # else he is a right child
+            elif childs == 1:
+                if tmp.right_child!=None:
+                    child = tmp.right_child
                 else:
-                    if tmp.left_child is not None:
-                        tmp.parent.right_child = tmp.left_child
-                    else:
-                        tmp.parent.right_child = tmp.right_child                    
+                    child = tmp.left_child
+                # replace the node to ce deleted with its child
+                if parent.left_child == tmp:
+                  parent.left_child = child
+                else:
+                    parent.right_child = child    
+                # seetting the correct parent for the node child we switched    
+                child.parent = parent               
+            # Case 3: the node we are trying to delete have a two childs
+            elif childs == 2:
+                # Getting the successor of the node we want to delete
+                successor = Successor(tmp.right_child)
+                # Switching the node we want to delete value with his successor value
+                tmp.value = successor.value
+                # Removing the refrence from the parent of the sccessor
+                self.__delete(successor)
+        else:
+            raise ValueNotExistsException()
 
 
                 
@@ -400,7 +443,7 @@ class BSTree:
         while(tmp != None):
             if apply('==', tmp.value, value):
                 return tmp
-            if not apply('>', tmp.value, value):
+            if not apply('>', value, tmp.value):
                 tmp = tmp.left_child
             else:
                 tmp = tmp.right_child
@@ -415,7 +458,7 @@ class BSTree:
                 arr.append(node.value)
                 traverse(node.right_child)
 
-        if self.root:
+        if self.root and self.root.value != None:
             traverse(self.root)
             return arr
         else:
@@ -437,7 +480,10 @@ class BSTree:
         if tmp:
             return maxDepth(tmp)
         else:
-            raise EmptyTreeException()        
+            raise EmptyTreeException()     
+
+    def delete(self, obj):
+        self.root.delete(obj)   
             
 
 Feets = make_feets_class()
@@ -449,6 +495,50 @@ print(apply('add',Meters(1), Feets['new'](1)))
 print(feets_to_meters(1))            
 
 
+
+# Driver ##
+
+l = Meters(20)
+l2 = Inches(20)
+print(l)
+
+for v in ["25.8 in", "25.8 ft", [], 4]:
+    try:
+        print(str(Inches(v)))
+    except Exception as e:
+        print(e)
+
+f = Feets['new']('25.8 ft')
+print(f['get']('__str__')())
+print(f['get']('__repr__')())
+
+m = Miles['new']('25.8 mi')
+print(m['get']('__str__')())
+print(m['get']('__repr__')())
+print(to_repr(apply('add', Feets['new'](1.5),Miles['new'](1))))
+print("########### operators ############")
+print(to_repr(apply('gt',Miles['new'](1),Inches(1.5))))
+
+print(to_repr(apply('gt',Inches(1.5), Miles['new'](1))))
+
+print(to_repr(apply('>',Miles['new'](1),Inches(1.5))))
+
+print(to_repr(apply('>',Inches(1.5), Miles['new'](1))))
+
+print(to_repr(apply('eq',Feets['new'](1),Inches(feets_to_inches(1)))))
+
+print(to_repr(apply('eq',Inches(1.5),Feets['new'](inches_to_feets(1.5)))))
+
+print(to_repr(apply('==', Feets['new'](1), Inches(1.5))))
+
+print(to_repr(apply('==', Inches(1.5), Feets['new'](1))))
+
+print('############ coerce_apply ##########')
+print(to_repr(coerce_apply('add',Meters(1.5), Inches(1))))
+print(to_repr(coerce_apply('add', Inches(1) ,Meters(1.5))))
+print(to_repr(coerce_apply('sub',Meters(1), Inches(1.5))))
+print(to_repr(coerce_apply('sub', Inches(1.5) ,Meters(1))))
+
 tree =  BSTree()
 print(tree)
 tree.insert(Meters(10))
@@ -456,11 +546,16 @@ try:
     tree.insert(Meters(10))
 except Exception as e:
     print(e)
+tree.insert(Meters(1000000))
 tree.insert(Inches(10))
 tree.insert(Feets['new'](10))
 tree.insert(Miles['new'](10))
-print(tree)
-print(tree.in_order())
+tree.insert(Inches(12))
+tree.insert(Feets['new'](15))
+tree.insert(Miles['new'](1))
+tree.insert(Inches(5))
+tree.insert(Feets['new'](0.1))
+
 print('-- in order print after insert ------------------------------')
 for v in tree.in_order():
     if (isinstance(v, dict)):
@@ -468,43 +563,24 @@ for v in tree.in_order():
     else:
         print(v, end=" = ")
     print(apply('add', Meters(0), v))
-print(tree.search(Meters(10)))
+print('-- in order print after delete ------------------------------')
+tree.delete(Meters(1000000))
+# tree.delete(Inches(10))
+tree.delete(Feets['new'](10))
+tree.delete(Miles['new'](10))
+tree.delete(Inches(12))
+tree.delete(Feets['new'](15))
+tree.delete(Miles['new'](1))
+tree.delete(Inches(5))
+# tree.delete(Feets['new'](0.1))
+# tree.delete(Meters(10))
 
-## Driver ##
-
-# l = Meters(20)
-# l2 = Inches(20)
-# print(l)
-
-# for v in ["25.8 in", "25.8 ft", [], 4]:
-#     try:
-#         print(str(Inches(v)))
-#     except Exception as e:
-#         print(e)
-
-# f = Feets['new']('25.8 ft')
-# print(f['get']('__str__')())
-# print(f['get']('__repr__')())
-
-# m = Miles['new']('25.8 mi')
-# print(m['get']('__str__')())
-# print(m['get']('__repr__')())
-# print(to_repr(apply('add', Feets['new'](1.5),Miles['new'](1))))
-# print("########### operators ############")
-# print(to_repr(apply('gt',Miles['new'](1),Inches(1.5))))
-
-# print(to_repr(apply('gt',Inches(1.5), Miles['new'](1))))
-
-# print(to_repr(apply('>',Miles['new'](1),Inches(1.5))))
-
-# print(to_repr(apply('>',Inches(1.5), Miles['new'](1))))
-
-# print(to_repr(apply('eq',Feets['new'](1),Inches(feets_to_inches(1)))))
-
-# print(to_repr(apply('eq',Inches(1.5),Feets['new'](inches_to_feets(1.5)))))
-
-# print(to_repr(apply('==', Feets['new'](1), Inches(1.5))))
-
-# print(to_repr(apply('==', Inches(1.5), Feets['new'](1))))
-
-
+try:
+    for v in tree.in_order():
+        if (isinstance(v, dict)):
+            print(v['get']('__str__')(), end=" = ")
+        else:
+            print(v, end=" = ")
+        print(apply('add', Meters(0), v))
+except Exception as e:
+    print(e)
