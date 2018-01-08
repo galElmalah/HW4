@@ -320,7 +320,7 @@ class TreeNode:
         if node:
             # the node have two childrens
             if node.left_child and node.right_child:
-                [parent, successor] = node.__Successor(node)
+                [parent, successor] = node.__Successor(node.right_child)
             
                 if parent.left_child == successor:
                     parent.left_child = successor.right_child
@@ -350,6 +350,15 @@ class TreeNode:
         else:
             return self.left_child.__Successor(self)
 
+    def in_order(self, arr):
+        if self:
+            if self.left_child:
+                self.left_child.in_order(arr)
+            arr.append(self.value)
+            if self.right_child:
+                self.right_child.in_order(arr)
+            return arr
+
 
                 
 # BST class
@@ -376,15 +385,8 @@ class BSTree:
     def in_order(self):
         arr = []
 
-        def traverse(node):
-            if node:
-                traverse(node.left_child)
-                arr.append(node.value)
-                traverse(node.right_child)
-
         if self.root and self.root.value != None:
-            traverse(self.root)
-            return arr
+            return self.root.in_order(arr)
         else:
             raise EmptyTreeException()
     
@@ -487,7 +489,7 @@ for v in tree.in_order():
         print(v)
 
 print('-- in order print after delete ------------------------------')
-# tree.delete(Meters(11))
+tree.delete(Meters(11))
 # tree.delete(Meters(miles_to_meters(1.1)))
 # tree.delete(Meters(9))
 # tree.delete(Inches(10))
@@ -508,3 +510,4 @@ try:
             print(v)
 except Exception as e:
     print(e)
+print(tree.height())
