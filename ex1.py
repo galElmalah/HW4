@@ -266,7 +266,7 @@ def coerce_apply(operator, obj1, obj2):
         return apply('sub', Meters(0), obj3)   
 
 
-################### Part 4 Recursiv Data Structures and Exceptions #################
+################### Part 4 Recursive Data Structures and Exceptions #################
 
 
 # exceptions classes
@@ -311,35 +311,51 @@ class TreeNode:
         # return the max height plus the current node addition to that height ( +1 )
         return max(left_height,right_height)+1
 
-    def delete(self, obj):
-        try:
-            node = self.search(self, obj)
-        except ValueNotExistsException as e:
-            print(e)
-            return
-        if node:
-            # the node have two childrens
-            [parent, successor] = node.__Successor(node.right_child)
-            if node.left_child and node.right_child:
-            
-                if parent.left_child == successor:
-                    parent.left_child = successor.right_child
+
+    def delete(self, key):
+        """ delete the node with the given key and return the 
+        root node of the tree """
+
+        if apply('==', self.value, key):
+            # found the node we need to delete
+
+            if self.right_child and self.left_child: 
+
+                # get the successor node and its parent 
+                [psucc, succ] = self.right_child.__Successor(self)
+
+                # splice out the successor
+                # (we need the parent to do this) 
+
+                if psucc.left_child == succ:
+                    psucc.left_child = succ.right_child
                 else:
-                    parent.right_child = successor.left_child
-                
-                successor.left_child = node.left_child
-                successor.right_child = node.right_child
-                
-                node = successor
+                    psucc.right_child = succ.right_child
+
+                # reset the left_child and right_child children of the successor
+
+                succ.left_child = self.left_child
+                succ.right_child = self.right_child
+
+                return succ                
+
             else:
-                # The node have only a left child
-                if parent != node:
-                    parent.left_child = successor.right_child
+                # "easier" case
+                if self.left_child:
+                    return self.left_child    # promote the left_child subtree
                 else:
-                    parent.right_child = successor.right_child
-                
+                    return self.right_child   # promote the right_child subtree 
+        else:
+            if apply('>',self.value,  key):          # key should be in the left_child subtree
+                if self.left_child:
+                    self.left_child = self.left_child.delete(key)
+                # else the key is not in the tree 
 
+            else:                       # key should be in the right_child subtree
+                if self.right_child:
+                    self.right_child = self.right_child.delete(key)
 
+        return self
 
 
     def search(self,node, obj):
@@ -385,7 +401,11 @@ class BSTree:
         if self.root == None:
             raise EmptyTreeException()
         else:
-            return self.root.search(self.root,value)
+            node = self.root
+            if node:
+                return self.root.search(node, value)
+            else:
+                raise ValueNotExistsException(value)
     
     def in_order(self):
         arr = []
@@ -401,7 +421,8 @@ class BSTree:
             raise EmptyTreeException()     
 
     def delete(self, obj):
-        self.root.delete(obj)   
+        self.root = self.root.delete(obj) 
+  
             
 
 
@@ -493,18 +514,13 @@ for v in tree.in_order():
         print(v)
 
 print('-- in order print after delete ------------------------------')
-# tree.delete(Meters(11))
-# tree.delete(Meters(miles_to_meters(1.1)))
-# tree.delete(Meters(9))
-# tree.delete(Inches(10))
-# tree.delete(Feets['new'](10))
-# tree.delete(Miles['new'](10))
-# tree.delete(Inches(12))
-# tree.delete(Feets['new'](15))
-# tree.delete(Miles['new'](1))
-# tree.delete(Inches(5))
-# tree.delete(Feets['new'](0.1))
-# print(tree.height())
+tree.delete(Meters(11))
+tree.delete(Meters(10))
+
+tree.delete(Meters(miles_to_meters(1.1)))
+tree.delete(Meters(9))
+
+print(tree.height())
 
 try:
     for v in tree.in_order():
