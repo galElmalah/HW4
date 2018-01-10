@@ -295,7 +295,7 @@ class TreeNode:
         # if the node is empty (root)
         if node == None: node = TreeNode(obj)
         elif apply('==', obj, node.value): raise ValueExistsException(obj)
-        # obj.val is bigger meaning -> go to the rigt
+        # obj.val is bigger meaning -> go to the right
         elif apply('>', obj, node.value): node.right_child = self.insert(obj, node.right_child)
         # obj.val is smaller meaning -> go to the left
         elif not apply('>', obj, node.value): node.left_child = self.insert(obj, node.left_child) 
@@ -319,23 +319,28 @@ class TreeNode:
             return
         if node:
             # the node have two childrens
+            [parent, successor] = node.__Successor(node.right_child)
             if node.left_child and node.right_child:
-                [parent, successor] = node.__Successor(node.right_child)
             
                 if parent.left_child == successor:
                     parent.left_child = successor.right_child
                 else:
                     parent.right_child = successor.left_child
                 
-                successor.left_child = self.left_child
-                successor.right_child = self.right_child
+                successor.left_child = node.left_child
+                successor.right_child = node.right_child
                 
-                return successor
+                node = successor
             else:
-                if self.left_child:
-                    return self.left_child
+                # The node have only a left child
+                if parent != node:
+                    parent.left_child = successor.right_child
                 else:
-                    return self.right_child
+                    parent.right_child = successor.right_child
+                
+
+
+
 
     def search(self,node, obj):
         if node is None:
@@ -364,11 +369,11 @@ class TreeNode:
 # BST class
 class BSTree:
     def __init__(self):
-        self.root = TreeNode()
+        self.root = None
     
     def insert(self, objects):
-        if self.root.value == None:
-            self.root.value = objects[0] if type(objects) == list or type(objects) == tuple else objects
+        if self.root == None:
+            self.root = TreeNode(objects[0]) if type(objects) == list or type(objects) == tuple else TreeNode(objects)
             return
         if type(objects) == list or type(objects) == tuple :
             for obj in objects:
@@ -384,7 +389,6 @@ class BSTree:
     
     def in_order(self):
         arr = []
-
         if self.root and self.root.value != None:
             return self.root.in_order(arr)
         else:
@@ -474,13 +478,13 @@ print(tree.search(Meters(11)).value)
 print(tree.search(Meters(miles_to_meters(1.1))).value)
 print(tree.search(Meters(9)).value)
 print(tree.search(Inches(10)).value)
-print(tree.search(Feets['new'](10)).value['get']('value'))
-print(tree.search(Miles['new'](10)).value['get']('value'))
+print(tree.search(Feets['new'](10)).value['get']('__str__')())
+print(tree.search(Miles['new'](10)).value['get']('__str__')())
 print(tree.search(Inches(12)).value)
-print(tree.search(Feets['new'](15)).value['get']('value'))
-print(tree.search(Miles['new'](1)).value['get']('value'))
+print(tree.search(Feets['new'](15)).value['get']('__str__')())
+print(tree.search(Miles['new'](1)).value['get']('__str__')())
 print(tree.search(Inches(5)).value)
-print(tree.search(Feets['new'](0.1)).value['get']('value'))
+print(tree.search(Feets['new'](0.1)).value['get']('__str__')())
 print('-- in order print after insert ------------------------------')
 for v in tree.in_order():
     if (isinstance(v, dict)):
@@ -489,7 +493,7 @@ for v in tree.in_order():
         print(v)
 
 print('-- in order print after delete ------------------------------')
-tree.delete(Meters(11))
+# tree.delete(Meters(11))
 # tree.delete(Meters(miles_to_meters(1.1)))
 # tree.delete(Meters(9))
 # tree.delete(Inches(10))
