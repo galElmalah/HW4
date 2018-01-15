@@ -1,3 +1,8 @@
+# TODO:
+# tree __str__ and __repr__ functions
+# theoretical section
+# add name and id to the main file 
+
 ############# part 1 ###############
 # part a
 
@@ -286,10 +291,10 @@ class EmptyTreeException(Exception):
 
 # node class
 class TreeNode:
-    def __init__(self,value = None):
+    def __init__(self,value = None,left = None, right = None):
         self.value = value
-        self.left_child = None
-        self.right_child = None
+        self.left_child = left
+        self.right_child = right
 
     def insert(self, obj, node):
         # if the node is empty (root)
@@ -298,7 +303,7 @@ class TreeNode:
         # obj.val is bigger meaning -> go to the right
         elif apply('>', obj, node.value): node.right_child = self.insert(obj, node.right_child)
         # obj.val is smaller meaning -> go to the left
-        elif not apply('>', obj, node.value): node.left_child = self.insert(obj, node.left_child) 
+        else: node.left_child = self.insert(obj, node.left_child) 
         return node       
 
     def height(self, node):
@@ -362,8 +367,8 @@ class TreeNode:
         if node is None:
             raise ValueNotExistsException(obj)  
         if apply('==', node.value, obj): return node
-        if apply('>', node.value, obj): return node.search(node.left_child,obj)
-        if not apply('>', node.value, obj): return node.search(node.right_child,obj)
+        elif apply('>', node.value, obj): return node.search(node.left_child,obj)
+        else: return node.search(node.right_child,obj)
 
     def __Successor(self, parent):
         if self.left_child==None:
@@ -380,6 +385,12 @@ class TreeNode:
                 self.right_child.in_order(arr)
             return arr
 
+    def __str__(self):
+        pass
+    def __repr__(self):
+        pass
+
+
 
                 
 # BST class
@@ -388,14 +399,17 @@ class BSTree:
         self.root = None
     
     def insert(self, objects):
-        if self.root == None:
-            self.root = TreeNode(objects[0]) if type(objects) == list or type(objects) == tuple else TreeNode(objects)
-            return
-        if type(objects) == list or type(objects) == tuple :
-            for obj in objects:
-                self.root.insert(obj, self.root)
-        else:
-            self.root.insert(objects, self.root)
+        try:
+            if self.root == None:
+                self.root = TreeNode(objects[0]) if type(objects) == list or type(objects) == tuple else TreeNode(objects)
+                return
+            if type(objects) == list or type(objects) == tuple :
+                for obj in objects:
+                    self.root.insert(obj, self.root)
+            else:
+                self.root.insert(objects, self.root)
+        except Exception as err:
+            print(err)
     
     def search(self, value):
         if self.root == None:
@@ -414,14 +428,21 @@ class BSTree:
         else:
             raise EmptyTreeException()
     
-    def height(self):
-        if self.root.value:
+    def height(self, value):
+        if self.root == node:
             return self.root.height(self.root)
         else:
             raise EmptyTreeException()     
 
     def delete(self, obj):
         self.root = self.root.delete(obj) 
+    
+    def __str__(self):
+        # TODO: in str and repr implement level traversal
+        pass
+
+    def __repr__(self):
+        pass
   
             
 
@@ -474,38 +495,42 @@ print(to_repr(coerce_apply('sub',Meters(1), Inches(1.5))))
 print(to_repr(coerce_apply('sub', Inches(1.5) ,Meters(1))))
 
 tree =  BSTree()
-print(tree)
+
 tree.insert(Meters(10))
-try:
-    tree.insert(Meters(10))
-except Exception as e:
-    print(e)
-tree.insert(Meters(11))
-tree.insert(Meters(miles_to_meters(1.1)))
-tree.insert(Meters(9))
 tree.insert(Inches(10))
 tree.insert(Feets['new'](10))
 tree.insert(Miles['new'](10))
-tree.insert(Inches(12))
-tree.insert(Feets['new'](15))
-tree.insert(Miles['new'](1))
-tree.insert(Inches(5))
-tree.insert(Feets['new'](0.1))
-## testing search function
-print("#### search function ####")
-print(tree.search(Meters(11)).value)
-print(tree.search(Inches(12)).value)
-print(tree.search(Meters(11)).value)
-print(tree.search(Meters(miles_to_meters(1.1))).value)
-print(tree.search(Meters(9)).value)
-print(tree.search(Inches(10)).value)
-print(tree.search(Feets['new'](10)).value['get']('__str__')())
-print(tree.search(Miles['new'](10)).value['get']('__str__')())
-print(tree.search(Inches(12)).value)
-print(tree.search(Feets['new'](15)).value['get']('__str__')())
-print(tree.search(Miles['new'](1)).value['get']('__str__')())
-print(tree.search(Inches(5)).value)
-print(tree.search(Feets['new'](0.1)).value['get']('__str__')())
+
+# try:
+#     tree.insert(Meters(10))
+# except Exception as e:
+#     print(e)
+# tree.insert(Meters(11))
+# tree.insert(Meters(miles_to_meters(1.1)))
+# tree.insert(Meters(9))
+# tree.insert(Inches(10))
+# tree.insert(Feets['new'](10))
+# tree.insert(Miles['new'](10))
+# tree.insert(Inches(12))
+# tree.insert(Feets['new'](15))
+# tree.insert(Miles['new'](1))
+# tree.insert(Inches(5))
+# tree.insert(Feets['new'](0.1))
+# ## testing search function
+# print("#### search function ####")
+# print(tree.search(Meters(11)).value)
+# print(tree.search(Inches(12)).value)
+# print(tree.search(Meters(11)).value)
+# print(tree.search(Meters(miles_to_meters(1.1))).value)
+# print(tree.search(Meters(9)).value)
+# print(tree.search(Inches(10)).value)
+# print(tree.search(Feets['new'](10)).value['get']('__str__')())
+# print(tree.search(Miles['new'](10)).value['get']('__str__')())
+# print(tree.search(Inches(12)).value)
+# print(tree.search(Feets['new'](15)).value['get']('__str__')())
+# print(tree.search(Miles['new'](1)).value['get']('__str__')())
+# print(tree.search(Inches(5)).value)
+# print(tree.search(Feets['new'](0.1)).value['get']('__str__')())
 print('-- in order print after insert ------------------------------')
 for v in tree.in_order():
     if (isinstance(v, dict)):
@@ -514,13 +539,23 @@ for v in tree.in_order():
         print(v)
 
 print('-- in order print after delete ------------------------------')
-tree.delete(Meters(11))
+# tree.delete(Meters(11))
+# tree.delete(Meters(miles_to_meters(1.1)))
+# tree.delete(Meters(9))
+# tree.delete(Inches(10))
+# tree.delete(Feets['new'](10))
+# tree.delete(Miles['new'](10))
+# tree.delete(Inches(12))
+# tree.delete(Feets['new'](15))
+# tree.delete(Miles['new'](1))
+# tree.delete(Inches(5))
+# tree.delete(Feets['new'](0.1))
+# tree.delete(Meters(10))
+
 tree.delete(Meters(10))
-
-tree.delete(Meters(miles_to_meters(1.1)))
-tree.delete(Meters(9))
-
-print(tree.height())
+# tree.delete(Inches(10))
+# tree.delete(Feets['new'](10))
+# tree.delete(Miles['new'](10))
 
 try:
     for v in tree.in_order():
@@ -530,4 +565,3 @@ try:
             print(v)
 except Exception as e:
     print(e)
-print(tree.height())
