@@ -1,8 +1,10 @@
-# TODO:
-# tree __str__ and __repr__ functions
-# theoretical section
-# add name and id to the main file 
+"""
+Authors: Gal Elmalah & Yoel Zeitoun
+ID: Gal: 307957175, Yoel: 317653871
+Campus:  Ashdod
+Program: HW4.py
 
+"""
 ############# part 1 ###############
 # part a
 
@@ -127,7 +129,7 @@ def make_miles_class():
         return '{} mi'.format(self['get']('value'))
 
     def __repr__(self):
-        return 'miles[\'new\']({})'.format(self['get']('value'))
+        return 'Miles[\'new\']({})'.format(self['get']('value'))
 
     __type__ = 'Miles'
     return make_class(locals())
@@ -157,12 +159,18 @@ def type_of(obj):
 #################### Part 3 Generic functions ########################
 
 def type_tag(x):
+    """
+    returns the type of x using the type_of function
+    """
     return type_tag.tags[type_of(x)]
 
 type_tag.tags = {type_of(Meters(0)):'m',type_of(Inches(0)):'i',type_of(Feets):'ft', type_of(Miles):'mi'}
 
 
 def apply(operator, obj1, obj2):
+    """
+    apply the specific operator given
+    """
     types = (type_tag(obj1), type_tag(obj2))
     if operator == '>' or operator == 'gt':
         operator=('gt', '>')
@@ -172,6 +180,10 @@ def apply(operator, obj1, obj2):
     return apply.implementation[key](obj1, obj2)
 
 def greater_classes_shmaython(obj1, obj2):
+    """ 
+    helper function for the apply function
+    obj1 and obj2 are of Meters Inches feets or Miles type
+    """
     #obj1 is the the class 
     if isinstance(obj1, Meters):
         if type_of(obj2)=='Miles':
@@ -186,6 +198,10 @@ def greater_classes_shmaython(obj1, obj2):
             return obj1.value > feets_to_inches(obj2['get']('value'))
 
 def equal_classes_shmaython(obj1, obj2):
+    """ 
+    helper function for the apply function
+    obj1 and obj2 are of Meters Inches feets or Miles type
+    """
     #obj1 is the the class 
     if isinstance(obj1, Meters):
         if type_of(obj2)=='Miles':
@@ -263,6 +279,9 @@ apply.implementation =  {
 
 
 def coerce_apply(operator, obj1, obj2):
+    """
+    using the apply function to coerce the result of the operation to be return in Meters 
+    """
     if operator =='add':
         obj3 = apply('add', obj1, obj2)
         return apply('add', Meters(0), obj3)     
@@ -291,12 +310,22 @@ class EmptyTreeException(Exception):
 
 # node class
 class TreeNode:
+    """
+    represent a tree node
+    """
     def __init__(self,value = None,left = None, right = None):
+        """
+        each tree has a value and left and right childs
+        left,right = tree nodes
+        """
         self.value = value
         self.left_child = left
         self.right_child = right
 
     def insert(self, obj, node):
+        """
+        insert the obj to the right node while checking htat the value not already exist 
+        """
         # if the node is empty (root)
         if node == None: node = TreeNode(obj)
         elif apply('==', obj, node.value): raise ValueExistsException(obj)
@@ -307,6 +336,9 @@ class TreeNode:
         return node       
 
     def height(self, node):
+        """
+        getting the height of a specific node
+        """
         if node is None:
             return 0
         # getting the height of all the left sub trees
@@ -327,7 +359,7 @@ class TreeNode:
             if self.right_child and self.left_child: 
 
                 # get the successor node and its parent 
-                [psucc, succ] = self.right_child.__Successor(self)
+                [psucc, succ] = self.right_child.successor(self)
 
                 # splice out the successor
                 # (we need the parent to do this) 
@@ -364,19 +396,28 @@ class TreeNode:
 
 
     def search(self,node, obj):
+        """
+        search for a particular obj value in the nodes 
+        """
         if node is None:
             raise ValueNotExistsException(obj)  
         if apply('==', node.value, obj): return node
         elif apply('>', node.value, obj): return node.search(node.left_child,obj)
         else: return node.search(node.right_child,obj)
 
-    def __Successor(self, parent):
+    def successor(self, parent):
+        """
+        get the successor of a specific node
+        """
         if self.left_child==None:
             return [parent, self]
         else:
             return self.left_child.__Successor(self)
 
     def in_order(self, arr):
+        """
+        traverse the tree in order and append the elements to the array 
+        """
         if self:
             if self.left_child:
                 self.left_child.in_order(arr)
@@ -400,15 +441,21 @@ class TreeNode:
                 
 # BST class
 class BSTree:
-    def __init__(self):
-        self.root = None
+    def __init__(self,value=None):
+        """
+        constructor function for the tree
+        """
+        self.root = TreeNode(value) if value else None
     
     def insert(self, objects):
+        """
+        insert elements to the tree either trough a list or one at a time
+        """
         try:
             if self.root == None:
                 self.root = TreeNode(objects[0]) if type(objects) == list or type(objects) == tuple else TreeNode(objects)
                 return self.root
-            if type(objects) == list or type(objects) == tuple :
+            if isinstance(objects,(tuple,list)):
                 for obj in objects:
                     self.root.insert(obj, self.root)
                 return self.root
@@ -419,6 +466,9 @@ class BSTree:
             print(err)
     
     def search(self, value):
+        """
+        search the tree for a node with a specific key
+        """
         if self.root == None:
             raise EmptyTreeException()
         else:
@@ -429,6 +479,9 @@ class BSTree:
                 raise ValueNotExistsException(value)
     
     def in_order(self):
+        """
+        traverse the tree using the in order function of the treenode class and fill the array with the tree values 
+        """
         arr = []
         if self.root and self.root.value != None:
             return self.root.in_order(arr)
@@ -436,8 +489,11 @@ class BSTree:
             raise EmptyTreeException()
     
     def height(self, value=None):
+        """
+        get the tree height or a specific node in the tree
+        """
         if self.root:
-            if value == None or apply('==', self.root.value, value):
+            if value == None:
                 return self.root.height(self.root)
             else:
                 node = self.root.search(self.root ,value)
@@ -446,14 +502,21 @@ class BSTree:
             raise EmptyTreeException()     
 
     def delete(self, obj):
+        """
+        delete elements to the tree either trough a list or one at a time
+        """
         if self.root:
-            self.root = self.root.delete(obj) 
+            if isinstance(obj,(tuple,list)):
+                for o in obj:
+                    self.root = self.root.delete(o) 
+            else:
+                self.root = self.root.delete(obj) 
         else:
             raise EmptyTreeException()
         return self.root
 
     def __repr__(self):
-        return repr(self.root) 
+        return "BSTree(" + repr(self.root) + ")" 
   
             
 
@@ -549,22 +612,21 @@ for v in tree.in_order():
     else:
         print(v)
 
-print('-- in order print after delete ------------------------------')
 print("height of the Inches(10) node:" ,tree.height(Inches(10)))
 print(tree)
-tree.delete(Meters(11))
-tree.delete(Meters(miles_to_meters(1.1)))
-tree.delete(Meters(9))
-tree.delete(Inches(10))
-tree.delete(Feets['new'](10))
-tree.delete(Miles['new'](10))
-tree.delete(Inches(12))
-tree.delete(Feets['new'](15))
+print('-- in order print after delete ------------------------------')
+tree.delete([Meters(miles_to_meters(1.1)),Meters(11)])
+# tree.delete(Meters(9))
+# tree.delete(Inches(10))
+# tree.delete(Feets['new'](10))
+# tree.delete(Miles['new'](10))
+# tree.delete(Inches(12))
+# tree.delete(Feets['new'](15))
 tree.delete(Miles['new'](1))
 tree.delete(Inches(5))
 tree.delete(Feets['new'](0.1))
 tree.delete(Meters(10))
-print(tree)
+
 try:
     for v in tree.in_order():
         if (isinstance(v, dict)):
@@ -573,3 +635,5 @@ try:
             print(v)
 except Exception as e:
     print(e)
+print(eval(repr(tree)))
+
